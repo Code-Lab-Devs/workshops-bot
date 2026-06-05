@@ -123,7 +123,13 @@ async def webhook(request: Request):
     update = await request.json()
     await dp.feed_raw_update(bot, update)
     return {"ok": True}
+@dp.channel_post()
+async def handle_channel_files(message: types.Message):
 
+    if message.document:
+        file_id = message.document.file_id
+
+        print("NEW FILE_ID:", file_id)
 
 # =========================
 # health check
