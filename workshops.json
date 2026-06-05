@@ -3,19 +3,33 @@
     "id": 1,
     "title": "GitHub",
     "description": "مقدمة إلى GitHub",
-    "summary": "شرح المستودعات والـ commits",
-
+    "summary": "إذا كنت في بداية رحلتك في البرمجة أو ترغب في تعلم الطريقة الصحيحة لإدارة مشاريعك وتتبع التعديلات على الأكواد، فهذه الورشة مناسبة لك. خلال الورشة سنتعرف على أساسيات أداة Git ومنصة GitHub، وكيفية استخدامها لحفظ المشاريع، إدارة الإصدارات، والتعاون على تطوير البرمجيات.",
     "files": [
       "BQACAgQAAyEFAAT_941eAAMDaiMKzJMX6jmbYeeSZjNUzm0ie7AAAh8hAAJeSxlRhXCD4IKjr_g7BA"
     ],
-
     "resources": [
       "https://youtu.be/fDkR0TDR9dI"
     ],
-
     "next_steps": [
-      "جرب تعمل repo بنفسك",
-      "ارفع مشروع بسيط"
+      "جرب تصنع repo بنفسك",
+      "ارفع مشروع بسيط",
+      ""
+    ]
+  },
+  {
+    "id": 2,
+    "title": "figma",
+    "description": "تصميم واجهات مستخدم تفاعلية باستخدام figma",
+    "summary": "figma من اهم الادوات المستخدمة في تصميم واجهات المستخدم و تجربة المستخدم حيث توفر عدة ميزات اسهل التواصل بين مطور البرمجيات و مصمم الواجهات",
+    "files": [
+      "BQACAgQAAyEFAAToiUBWAAMFaiMWxwYq_4DuMCdJz3KxefXEo9YAAnAeAAIkqRlRPFjrIgrUER47BA",
+      "BQACAgQAAyEFAAToiUBWAAMEaiMWx40o3X4xzk0dbfjEYjsT2e0AAm8eAAIkqRlRIIl4RZCsCBg7BA"
+    ],
+    "resources": [
+      "https://youtube.com/playlist?list=PLjzhiGLyugKwnM6uN4NXhfpU8L7XvtDEv&si=QZS6itfel4AkcRR_"
+    ],
+    "next_steps": [
+      "صمم واجهات تطبيق توصيل طلبات و حاول مقارنتها مع تطبيق معروف"
     ]
   }
 ]
