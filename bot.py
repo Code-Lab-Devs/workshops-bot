@@ -1,6 +1,8 @@
 import os
 import json
+
 from aiogram import Bot, Dispatcher, types
+from aiogram.exceptions import TelegramBadRequest
 from fastapi import FastAPI, Request
 
 TOKEN = os.getenv("BOT_TOKEN")
@@ -14,8 +16,13 @@ app = FastAPI()
 # تحميل الورش
 # =========================
 def load_workshops():
-    with open("workshops.json", "r", encoding="utf-8") as f:
-        return json.load(f)
+    try:
+        with open("workshops.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print("JSON ERROR:", e)
+        return []
+
 
 workshops = load_workshops()
 
@@ -26,10 +33,12 @@ workshops = load_workshops()
 @dp.message(lambda message: message.text == "/start")
 async def start(message: types.Message):
 
-    keyboard = types.InlineKeyboardMarkup(inline_keyboard=[
-        [types.InlineKeyboardButton(text=w["title"], callback_data=f"w_{w['id']}")]
-        for w in workshops
-    ])
+    keyboard = types.InlineKeyboardMarkup(
+        inline_keyboard=[
+            [types.InlineKeyboardButton(text=w["title"], callback_data=f"w_{w['id']}")]
+            for w in workshops
+        ]
+    )
 
     await message.answer(
         "📚 أرشيف ورش النادي البرمجي\nاختر ورشة:",
@@ -43,85 +52,164 @@ async def start(message: types.Message):
 @dp.callback_query()
 async def workshop_handler(callback: types.CallbackQuery):
 
-    await callback.answer()
-    data = callback.data
+    try:
 
-    # عرض الورشة
-    if data.startswith("w_"):
-        wid = int(data.split("_")[1])
-        w = next((x for x in workshops if x["id"] == wid), None)
+        try:
+            await callback.answer()
+        except TelegramBadRequest:
+            pass
 
-        if not w:
-            await callback.message.answer("الورشة غير موجودة")
-            return
+        data = callback.data
 
-        keyboard = types.InlineKeyboardMarkup(inline_keyboard=[
-            [types.InlineKeyboardButton(text="📝 الملخص", callback_data=f"sum_{wid}")],
-            [types.InlineKeyboardButton(text="📁 الملفات", callback_data=f"files_{wid}")],
-            [types.InlineKeyboardButton(text="🎥 المصادر", callback_data=f"res_{wid}")],
-            [types.InlineKeyboardButton(text="🚀 الخطوات", callback_data=f"steps_{wid}")],
-            [types.InlineKeyboardButton(text="🔙 رجوع", callback_data="home")]
-        ])
+        # عرض الورشة
+        if data.startswith("w_"):
 
-        await callback.message.edit_text(
-            f"⚙️ {w['title']}\n\n{w.get('description','')}",
-            reply_markup=keyboard
-        )
+            wid = int(data.split("_")[1])
 
-    # ملخص
-    elif data.startswith("sum_"):
-        wid = int(data.split("_")[1])
-        w = next(x for x in workshops if x["id"] == wid)
-        await callback.message.answer(w.get("summary", "لا يوجد ملخص"))
+            w = next(
+                (x for x in workshops if x["id"] == wid),
+                None
+            )
 
-    # ملفات (تشمل السلايدات)
-    elif data.startswith("files_"):
-        wid = int(data.split("_")[1])
-        w = next(x for x in workshops if x["id"] == wid)
+            if not w:
+                await callback.message.answer("الورشة غير موجودة")
+                return
 
-        files = w.get("files", [])
+            keyboard = types.InlineKeyboardMarkup(
+                inline_keyboard=[
+                    [types.InlineKeyboardButton(
+                        text="📝 الملخص",
+                        callback_data=f"sum_{wid}"
+                    )],
+                    [types.InlineKeyboardButton(
+                        text="📁 الملفات",
+                        callback_data=f"files_{wid}"
+                    )],
+                    [types.InlineKeyboardButton(
+                        text="🎥 المصادر",
+                        callback_data=f"res_{wid}"
+                    )],
+                    [types.InlineKeyboardButton(
+                        text="🚀 الخطوات التالية",
+                        callback_data=f"steps_{wid}"
+                    )],
+                    [types.InlineKeyboardButton(
+                        text="🔙 رجوع",
+                        callback_data="home"
+                    )]
+                ]
+            )
 
-        if files:
-            for f in files:
-                await callback.message.answer_document(f)
-        else:
-            await callback.message.answer("لا توجد ملفات")
+            await callback.message.edit_text(
+                f"⚙️ {w['title']}\n\n{w.get('description', '')}",
+                reply_markup=keyboard
+            )
 
-    # مصادر يوتيوب
-    elif data.startswith("res_"):
-        wid = int(data.split("_")[1])
-        w = next(x for x in workshops if x["id"] == wid)
+        # الملخص
+        elif data.startswith("sum_"):
 
-        resources = w.get("resources", [])
+            wid = int(data.split("_")[1])
 
-        if resources:
-            await callback.message.answer("\n".join(resources))
-        else:
-            await callback.message.answer("لا توجد مصادر")
+            w = next(
+                (x for x in workshops if x["id"] == wid),
+                None
+            )
 
-    # خطوات بعد الورشة
-    elif data.startswith("steps_"):
-        wid = int(data.split("_")[1])
-        w = next(x for x in workshops if x["id"] == wid)
+            if not w:
+                return
 
-        steps = w.get("next_steps", [])
+            await callback.message.answer(
+                w.get("summary", "لا يوجد ملخص")
+            )
 
-        if steps:
-            await callback.message.answer("\n".join(steps))
-        else:
-            await callback.message.answer("لا توجد خطوات")
+        # الملفات
+        elif data.startswith("files_"):
 
-    # رجوع
-    elif data == "home":
-        keyboard = types.InlineKeyboardMarkup(inline_keyboard=[
-            [types.InlineKeyboardButton(text=w["title"], callback_data=f"w_{w['id']}")]
-            for w in workshops
-        ])
+            wid = int(data.split("_")[1])
 
-        await callback.message.edit_text(
-            "📚 أرشيف ورش النادي البرمجي\nاختر ورشة:",
-            reply_markup=keyboard
-        )
+            w = next(
+                (x for x in workshops if x["id"] == wid),
+                None
+            )
+
+            if not w:
+                return
+
+            files = w.get("files", [])
+
+            if files:
+                for file_id in files:
+                    try:
+                        await callback.message.answer_document(file_id)
+                    except Exception as e:
+                        print("FILE SEND ERROR:", e)
+            else:
+                await callback.message.answer("لا توجد ملفات")
+
+        # المصادر
+        elif data.startswith("res_"):
+
+            wid = int(data.split("_")[1])
+
+            w = next(
+                (x for x in workshops if x["id"] == wid),
+                None
+            )
+
+            if not w:
+                return
+
+            resources = w.get("resources", [])
+
+            if resources:
+                await callback.message.answer(
+                    "\n".join(resources)
+                )
+            else:
+                await callback.message.answer("لا توجد مصادر")
+
+        # الخطوات التالية
+        elif data.startswith("steps_"):
+
+            wid = int(data.split("_")[1])
+
+            w = next(
+                (x for x in workshops if x["id"] == wid),
+                None
+            )
+
+            if not w:
+                return
+
+            steps = w.get("next_steps", [])
+
+            if steps:
+                await callback.message.answer(
+                    "\n".join(steps)
+                )
+            else:
+                await callback.message.answer("لا توجد خطوات")
+
+        # رجوع
+        elif data == "home":
+
+            keyboard = types.InlineKeyboardMarkup(
+                inline_keyboard=[
+                    [types.InlineKeyboardButton(
+                        text=w["title"],
+                        callback_data=f"w_{w['id']}"
+                    )]
+                    for w in workshops
+                ]
+            )
+
+            await callback.message.edit_text(
+                "📚 أرشيف ورش النادي البرمجي\nاختر ورشة:",
+                reply_markup=keyboard
+            )
+
+    except Exception as e:
+        print("CALLBACK ERROR:", e)
 
 
 # =========================
@@ -129,8 +217,14 @@ async def workshop_handler(callback: types.CallbackQuery):
 # =========================
 @app.post("/webhook")
 async def webhook(request: Request):
-    update = await request.json()
-    await dp.feed_raw_update(bot, update)
+
+    try:
+        update = await request.json()
+        await dp.feed_raw_update(bot, update)
+
+    except Exception as e:
+        print("WEBHOOK ERROR:", e)
+
     return {"ok": True}
 
 
@@ -140,8 +234,17 @@ async def webhook(request: Request):
 @dp.channel_post()
 async def handle_channel_files(message: types.Message):
 
-    if message.document:
-        print("NEW FILE_ID:", message.document.file_id)
+    try:
+
+        if message.document:
+
+            print("================================")
+            print("FILE NAME:", message.document.file_name)
+            print("FILE ID:", message.document.file_id)
+            print("================================")
+
+    except Exception as e:
+        print("CHANNEL ERROR:", e)
 
 
 # =========================
