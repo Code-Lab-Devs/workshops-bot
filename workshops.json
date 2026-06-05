@@ -4,9 +4,18 @@
     "title": "GitHub",
     "description": "مقدمة إلى GitHub",
     "summary": "شرح المستودعات والـ commits",
-    "slides_file_id": "",
-    "files": [],
-    "resources": [],
-    "next_steps": []
+
+    "files": [
+      "BQACAgQAAyEFAAT_941eAAMDaiMKzJMX6jmbYeeSZjNUzm0ie7AAAh8hAAJeSxlRhXCD4IKjr_g7BA"
+    ],
+
+    "resources": [
+      "https://youtu.be/fDkR0TDR9dI"
+    ],
+
+    "next_steps": [
+      "جرب تعمل repo بنفسك",
+      "ارفع مشروع بسيط"
+    ]
   }
 ]

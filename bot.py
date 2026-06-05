@@ -10,7 +10,9 @@ dp = Dispatcher()
 app = FastAPI()
 
 
+# =========================
 # تحميل الورش
+# =========================
 def load_workshops():
     with open("workshops.json", "r", encoding="utf-8") as f:
         return json.load(f)
@@ -19,7 +21,7 @@ workshops = load_workshops()
 
 
 # =========================
-# /start (تصحيح مهم)
+# /start
 # =========================
 @dp.message(lambda message: message.text == "/start")
 async def start(message: types.Message):
@@ -41,12 +43,10 @@ async def start(message: types.Message):
 @dp.callback_query()
 async def workshop_handler(callback: types.CallbackQuery):
 
-    await callback.answer()  # 🔥 مهم جدًا
-
+    await callback.answer()
     data = callback.data
 
-
-    # عرض ورشة
+    # عرض الورشة
     if data.startswith("w_"):
         wid = int(data.split("_")[1])
         w = next((x for x in workshops if x["id"] == wid), None)
@@ -57,16 +57,16 @@ async def workshop_handler(callback: types.CallbackQuery):
 
         keyboard = types.InlineKeyboardMarkup(inline_keyboard=[
             [types.InlineKeyboardButton(text="📝 الملخص", callback_data=f"sum_{wid}")],
-            [types.InlineKeyboardButton(text="📄 السلايدات", callback_data=f"slides_{wid}")],
             [types.InlineKeyboardButton(text="📁 الملفات", callback_data=f"files_{wid}")],
+            [types.InlineKeyboardButton(text="🎥 المصادر", callback_data=f"res_{wid}")],
+            [types.InlineKeyboardButton(text="🚀 الخطوات", callback_data=f"steps_{wid}")],
             [types.InlineKeyboardButton(text="🔙 رجوع", callback_data="home")]
         ])
 
         await callback.message.edit_text(
-            f"⚙️ {w['title']}\n\n{w.get('description', '')}",
+            f"⚙️ {w['title']}\n\n{w.get('description','')}",
             reply_markup=keyboard
         )
-
 
     # ملخص
     elif data.startswith("sum_"):
@@ -74,21 +74,7 @@ async def workshop_handler(callback: types.CallbackQuery):
         w = next(x for x in workshops if x["id"] == wid)
         await callback.message.answer(w.get("summary", "لا يوجد ملخص"))
 
-
-    # سلايدات
-    elif data.startswith("slides_"):
-        wid = int(data.split("_")[1])
-        w = next(x for x in workshops if x["id"] == wid)
-
-        file_id = w.get("slides_file_id")
-
-        if file_id:
-            await callback.message.answer_document(file_id)
-        else:
-            await callback.message.answer("لا يوجد سلايدات")
-
-
-    # ملفات
+    # ملفات (تشمل السلايدات)
     elif data.startswith("files_"):
         wid = int(data.split("_")[1])
         w = next(x for x in workshops if x["id"] == wid)
@@ -101,8 +87,31 @@ async def workshop_handler(callback: types.CallbackQuery):
         else:
             await callback.message.answer("لا توجد ملفات")
 
+    # مصادر يوتيوب
+    elif data.startswith("res_"):
+        wid = int(data.split("_")[1])
+        w = next(x for x in workshops if x["id"] == wid)
 
-    # رجوع للهوم
+        resources = w.get("resources", [])
+
+        if resources:
+            await callback.message.answer("\n".join(resources))
+        else:
+            await callback.message.answer("لا توجد مصادر")
+
+    # خطوات بعد الورشة
+    elif data.startswith("steps_"):
+        wid = int(data.split("_")[1])
+        w = next(x for x in workshops if x["id"] == wid)
+
+        steps = w.get("next_steps", [])
+
+        if steps:
+            await callback.message.answer("\n".join(steps))
+        else:
+            await callback.message.answer("لا توجد خطوات")
+
+    # رجوع
     elif data == "home":
         keyboard = types.InlineKeyboardMarkup(inline_keyboard=[
             [types.InlineKeyboardButton(text=w["title"], callback_data=f"w_{w['id']}")]
@@ -123,13 +132,17 @@ async def webhook(request: Request):
     update = await request.json()
     await dp.feed_raw_update(bot, update)
     return {"ok": True}
+
+
+# =========================
+# channel file logger
+# =========================
 @dp.channel_post()
 async def handle_channel_files(message: types.Message):
 
     if message.document:
-        file_id = message.document.file_id
+        print("NEW FILE_ID:", message.document.file_id)
 
-        print("NEW FILE_ID:", file_id)
 
 # =========================
 # health check
