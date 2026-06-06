@@ -31,5 +31,22 @@
     "next_steps": [
       "صمم واجهات تطبيق توصيل طلبات و حاول مقارنتها مع تطبيق معروف"
     ]
+  },
+  {
+    "id": 3,
+    "title": "الاتمتة و بوتات تيليجرام",
+    "description": "مقدمة حول مفهوم الاتمتة و انشاء بوتات تيليجرام بإستخدام لغة بايثون",
+    "summary": "مقدمة حول مفهوم الاتمتة و انشاء بوتات تيليجرام بإستخدام لغة بايثون",
+    "files": [
+      "BQACAgQAAyEFAAToiUBWAAMGaiQugY2jBsqko6hLyQeQPhnny9QAAqUfAAIkqSFRpNBe9gABNvqFOwQ"
+    ],
+    "resources": [
+      "https://youtube.com/playlist?list=PLtGOJcWqvbqdzCjZAcXF02h4cWiPVnpyD&si=XjRXe-roHWlcaGhk",
+      "https://youtube.com/playlist?list=PLAooZ0tC0m8SluDtX4zBiTm8dZQYSj2Q_&si=JHbluvmKEqiwpLFv",
+      "https://youtube.com/playlist?list=PL-1UAVDVI3ffP10PyEF12HFnLK-MmKBDE&si=3avsgZQAewigywq1"
+    ],
+    "next_steps": [
+      "تصميم بوت تيليجرام يطبق مفاهيم الاتمتة"
+    ]
   }
 ]
