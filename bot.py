@@ -4,12 +4,63 @@ import json
 from aiogram import Bot, Dispatcher, types
 from aiogram.exceptions import TelegramBadRequest
 from fastapi import FastAPI, Request
+import asyncio
+import aiohttp
 
+from contextlib import asynccontextmanager
+from datetime import datetime, timedelta
 TOKEN = os.getenv("BOT_TOKEN")
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
-app = FastAPI()
+
+last_ping = datetime.now()
+
+
+async def keep_alive():
+
+    global last_ping
+
+    while True:
+
+        try:
+
+            now = datetime.now()
+
+            if now >= last_ping + timedelta(minutes=10):
+
+                async with aiohttp.ClientSession() as session:
+
+                    async with session.get(
+                        "https://workshops-bot.onrender.com/"
+                    ) as response:
+
+                        print(
+                            "SELF PING:",
+                            response.status
+                        )
+
+                last_ping = now
+
+        except Exception as e:
+
+            print("PING ERROR:", e)
+
+        await asyncio.sleep(30)
+        
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+
+    asyncio.create_task(
+        keep_alive()
+    )
+
+    print("KEEP ALIVE STARTED")
+
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 # =========================
