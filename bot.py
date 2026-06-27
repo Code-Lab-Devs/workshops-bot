@@ -122,12 +122,15 @@ workshops = load_workshops()
 async def start(message: types.Message):
 
     keyboard = ReplyKeyboardMarkup(
-        keyboard=[
-            [KeyboardButton(text=w["title"])]
-            for w in workshops
-        ],
-        resize_keyboard=True
-    )
+    keyboard=[
+        [
+            KeyboardButton(text=workshops[i]["title"]),
+            KeyboardButton(text=workshops[i + 1]["title"]) if i + 1 < len(workshops) else None
+        ]
+        for i in range(0, len(workshops), 2)
+    ],
+    resize_keyboard=True
+)
 
     await message.answer(
         "📚 أرشيف ورش النادي البرمجي\nاختر ورشة:",
