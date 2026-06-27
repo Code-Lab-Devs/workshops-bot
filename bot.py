@@ -35,7 +35,7 @@ def format_text(text: str) -> str:
             continue
 
         # 🔹 عناوين مرقمة (1. 2. 3.)
-        if re.match(r"^\d+\.", line):
+        if re.match(r"^\d+\.\s+[A-Za-z\u0600-\u06FF]", line):
             result.append(f"\n<b>🔹 {line}</b>")
             continue
 
