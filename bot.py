@@ -165,20 +165,26 @@ async def handle_workshop(message: types.Message):
             f"⚙️ {w['title']}\nاختر:",
             reply_markup=keyboard
         )
+
+        # نحفظ الورشة الحالية داخل المستخدم (حل بسيط)
+        message.bot.current_workshop = w
         return
 
     # جلب الورشة الحالية
-    wid = next((x["id"] for x in workshops if x["title"] in message.text), None)
-    w = next((x for x in workshops if x["id"] == wid), None)
+    w = getattr(message.bot, "current_workshop", None)
 
     if not w:
         return
 
+    # =========================
     # الملخص
+    # =========================
     if text == "📝 الملخص":
         await message.answer(w.get("summary", "لا يوجد ملخص"))
 
+    # =========================
     # الملفات
+    # =========================
     elif text == "📁 الملفات":
         files = w.get("files", [])
         if files:
@@ -187,7 +193,9 @@ async def handle_workshop(message: types.Message):
         else:
             await message.answer("لا توجد ملفات")
 
+    # =========================
     # المصادر
+    # =========================
     elif text == "🎥 المصادر":
         resources = w.get("resources", [])
         if resources:
@@ -195,22 +203,15 @@ async def handle_workshop(message: types.Message):
         else:
             await message.answer("لا توجد مصادر")
 
+    # =========================
     # الخطوات
+    # =========================
     elif text == "🚀 الخطوات التالية":
         steps = w.get("next_steps", [])
         if steps:
             await message.answer("\n".join(steps))
         else:
             await message.answer("لا توجد خطوات")
-            # await callback.message.edit_text(
-            #     f"⚙️ {w['title']}\n\n{w.get('description', '')}",
-            #     reply_markup=keyboard
-            # )
-
-    # except Exception as e:
-    #     print("CALLBACK ERROR:", e)
-
-
 # =========================
 # webhook
 # =========================
