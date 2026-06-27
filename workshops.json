@@ -58,25 +58,25 @@
     "description": "ورشة ألعاب وتحديات برمجية.",
     "summary": "طبيعة الورشة:\nورشة مقسمة إلى ثلاثة مستويات لتطوير التفكير البرمجي بطريقة ممتعة.\n\n1. المستوى المبتدئ\n• بناء برنامج باستخدام Scratch.\n\n2. المستوى المتوسط\n• التعرف على CSS.\n• لعبة Flexbox Froggy.\n• تطبيق عملي.\n\n3. المستوى المتقدم\n• حل مسائل Codeforces.\n• مسابقة برمجية بين الحضور.",
     "files": [],
-    "resources": [],
-    "next_steps": []
+    "resources": ["https://scratch.mit.edu/", "https://flexboxfroggy.com/", "https://codeforces.com/","https://leetcode.com/"],
+    "next_steps": ["حاول صنع لعبة بسيطة باستخدام Scratch.", "شارك في مسابقة برمجية على Codeforces.","حل الغاز تصميمية على flexboxfroggy." ]
   },
   {
     "id": 5,
     "title": "Phishing Sites",
     "description": "ورشة توعوية حول التصيد الاحتيالي.",
     "summary": "طبيعة الورشة:\nورشة في الأمن السيبراني لرفع الوعي بمخاطر التصيد الاحتيالي.\n\n1. مقدمة\n• مفهوم Phishing.\n• الهندسة الاجتماعية.\n\n2. التطبيق العملي\n• محاكاة صفحات مزيفة.\n• مقارنة الرابط الحقيقي بالمزيف.\n• طرق اكتشاف عمليات التصيد.",
-    "files": [],
-    "resources": [],
-    "next_steps": []
+    "files": ["BQACAgQAAxkBAAPOakApAh-kIBu1OenN23fG2LKV2X4AAoMfAAIRo9FSkzVfdNxW4E88BA"],
+    "resources": ["https://youtu.be/PapaQAyfZ6U","https://youtu.be/fEYTuFXVobU","https://cdimage.kali.org/kali-2026.1/kali-linux-2026.1-vmware-amd64.7z"],
+    "next_steps": ["حاول التعرف على روابط مزيفة.", "قم بإنشاء صفحة مزيفة لتجربة عملية.", "تعلم كيفية حماية نفسك من التصيد الاحتيالي."]
   },
   {
     "id": 6,
     "title": "APIs",
     "description": "مفهوم واجهات برمجة التطبيقات والهندسة العكسية لحركة البيانات.",
     "summary": "طبيعة الورشة:\nورشة عملية لفهم APIs وتحليل حركة البيانات بين التطبيقات والخوادم.\n\n1. أساسيات APIs\n• الطلبات والاستجابات.\n• أشهر الثغرات.\n\n2. الهندسة العكسية\n• تحليل حركة المرور.\n• فهم آلية عمل التطبيقات.\n\n3. التطبيق باستخدام Burp Suite\n• Intercept.\n• Repeater.\n• تحليل واختبار الطلبات.",
-    "files": [],
-    "resources": [],
-    "next_steps": []
+    "files": ["BQACAgQAAyEFAAToiUBWAAMKakArtSG5vtfgtZbwZkVzsxsdiyYAAkIhAALwuwABUpeJUeGeZAryPAQ"],
+    "resources": ["https://youtu.be/rq7DvjN1Gco","https://youtu.be/4dz4qDMwmCM","https://youtu.be/FGwPNrrnfBw","https://dl.pstmn.io/download/latest/win64","https://portswigger.net/burp/releases/professional-community-2026-3-3?requestededition=community&requestedplatform=windows"],
+    "next_steps": [ "قم بإنشاء طلب API بسيط.", "استخدم Burp Suite لتحليل حركة البيانات.", "جرب تعديل الطلبات ومراقبة الاستجابات."]
   }
 ]
