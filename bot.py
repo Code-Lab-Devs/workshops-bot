@@ -16,7 +16,43 @@ dp = Dispatcher()
 
 last_ping = datetime.now()
 
+import re
 
+def format_text(text: str) -> str:
+    lines = text.split("\n")
+    result = []
+
+    for line in lines:
+        line = line.strip()
+
+        if not line:
+            result.append("")
+            continue
+
+        # 🔹 عناوين رئيسية (تنتهي بـ :)
+        if line.endswith(":"):
+            result.append(f"\n<b>📌 {line[:-1]}</b>")
+            continue
+
+        # 🔹 عناوين مرقمة (1. 2. 3.)
+        if re.match(r"^\d+\.", line):
+            result.append(f"\n<b>🔹 {line}</b>")
+            continue
+
+        # 🔹 نقاط
+        if line.startswith("•"):
+            result.append(f"• {line[1:].strip()}")
+            continue
+
+        # 🔹 روابط
+        if line.startswith("http"):
+            result.append(f"🔗 <a href='{line}'>{line}</a>")
+            continue
+
+        # 🔹 نص عادي
+        result.append(f"{line}")
+
+    return "\n".join(result)
 async def keep_alive():
 
     global last_ping
@@ -155,8 +191,7 @@ async def workshop_handler(callback: types.CallbackQuery):
                 f"⚙️ {w['title']}\n\n{w.get('description', '')}",
                 reply_markup=keyboard
             )
-
-        # الملخص
+    # الملخص
         elif data.startswith("sum_"):
 
             wid = int(data.split("_")[1])
@@ -170,7 +205,9 @@ async def workshop_handler(callback: types.CallbackQuery):
                 return
 
             await callback.message.answer(
-                w.get("summary", "لا يوجد ملخص")
+                format_text(w.get("summary", "لا يوجد ملخص")),
+                parse_mode="HTML",
+                disable_web_page_preview=True
             )
 
         # الملفات
