@@ -120,15 +120,17 @@ workshops = load_workshops()
 # =========================
 @dp.message(lambda message: message.text == "/start")
 async def start(message: types.Message):
+    keyboard_list = []
 
+    for i in range(0, len(workshops), 2):
+        row = [KeyboardButton(text=workshops[i]["title"])]
+
+        if i + 1 < len(workshops):
+            row.append(KeyboardButton(text=workshops[i + 1]["title"]))
+
+        keyboard_list.append(row)
     keyboard = ReplyKeyboardMarkup(
-    keyboard=[
-        [
-            KeyboardButton(text=workshops[i]["title"]),
-            KeyboardButton(text=workshops[i + 1]["title"]) if i + 1 < len(workshops) else None
-        ]
-        for i in range(0, len(workshops), 2)
-    ],
+    keyboard=keyboard_list,
     resize_keyboard=True
 )
 
