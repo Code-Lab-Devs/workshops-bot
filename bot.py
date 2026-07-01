@@ -30,6 +30,7 @@ async def get_title(url: str) -> str:
                 html = await response.text()
 
         soup = BeautifulSoup(html, "html.parser")
+        print("URL:", url, "TITLE:", soup.title.string.strip() if soup.title else "")
         return soup.title.string.strip() if soup.title else ""
 
     except Exception:
