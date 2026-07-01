@@ -22,16 +22,29 @@ async def get_title(url: str) -> str:
     try:
         timeout = aiohttp.ClientTimeout(total=3)
 
+        # --- 1) YouTube fix ---
+        if "youtube.com" in url or "youtu.be" in url:
+            api = f"https://www.youtube.com/oembed?url={url}&format=json"
+
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(api) as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
+                        return data.get("title", "")
+            return ""
+
+        # --- 2) Normal websites ---
         async with aiohttp.ClientSession(timeout=timeout) as session:
             async with session.get(url, allow_redirects=True) as response:
+
                 if "text/html" not in response.headers.get("Content-Type", "").lower():
                     return ""
 
                 html = await response.text()
 
         soup = BeautifulSoup(html, "html.parser")
-        print("URL:", url, "TITLE:", soup.title.string.strip() if soup.title else "")
-        return soup.title.string.strip() if soup.title else ""
+
+        return soup.title.string.strip() if soup.title and soup.title.string else ""
 
     except Exception:
         return ""
