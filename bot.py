@@ -23,9 +23,11 @@ def get_title(url) -> str :
 
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "html.parser")
-
+        print("TITLE:", soup.title.string)
         return soup.title.string
-
+    else:
+        print("TITLE: No title found")
+        return ""
 
     response.close()
 bot = Bot(token=TOKEN)
