@@ -78,5 +78,18 @@
     "files": ["BQACAgQAAyEFAAToiUBWAAMKakArtSG5vtfgtZbwZkVzsxsdiyYAAkIhAALwuwABUpeJUeGeZAryPAQ"],
     "resources": ["https://youtu.be/rq7DvjN1Gco","https://youtu.be/4dz4qDMwmCM","https://youtu.be/FGwPNrrnfBw","https://dl.pstmn.io/download/latest/win64","https://portswigger.net/burp/releases/professional-community-2026-3-3?requestededition=community&requestedplatform=windows"],
     "next_steps": [ "قم بإنشاء طلب API بسيط.", "استخدم Burp Suite لتحليل حركة البيانات.", "جرب تعديل الطلبات ومراقبة الاستجابات."]
-  }
+  },
+  {
+  "id": 7,
+  "title": "flutter",
+  "description": "ورشة عمل على تقنية تطوير تطبيقات الموبايل Flutter",
+  "summary": "📌 وصف:\n- ورشة عمل على تقنية تطوير تطبيقات الموبايل Flutter\n\n📝 الملخص:\n- مقدمة تعريفية بالتقنية\n- مميزات Flutter\n- سبب اختيار التقنية\n- نشاط عملي بسيط\n\n🎯 الهدف:\n- التعرف على التقنية\n- زيادة الوعي التقني في هذا المجال\n\n📚 التفاصيل:\n- معلومات تعريفية عن Flutter (ما هي التقنية)\n- لماذا تم اختيارها\n- تعريف بلغة Dart\n- شرح الـ Widgets الأساسية في Flutter\n- نشاط عملي: رسم الواجهات وتنفيذها بالكود\n\n🛠 أسلوب التنفيذ:\n- شرح نظري مبسط للمفاهيم الأساسية\n- تجنب المواضيع المتقدمة لتفادي التعقيد\n- نشاط عملي لرسم الواجهات ومشاركة الحضور في التنفيذ",
+  "files": ["BQACAgQAAyEFAAToiUBWAAMLakLBh8Qes_OzPe_EukX7DykAAdKjAALsHgAC-FkZUqxlbSQlIspJPAQ"],
+  "resources": ["https://youtube.com/playlist?list=PLw6Y5u47CYq47oDw63bMqkq06fjuoK_GJ&si=gDFaYGi6o5vRH0Tb","https://youtube.com/playlist?list=PL93xoMrxRJIvtIXjAiX15wcyNv-LOWZa9&si=6z4wWqO-MkWt1Qaa"],
+  "next_steps": [
+    "قم بإنشاء تطبيق بسيط باستخدام flutter.",
+    "جرب استخدام مكتبة provider.",
+    "استكشف مشاريع flutter مفتوحة المصدر."
+  ]
+} 
 ]

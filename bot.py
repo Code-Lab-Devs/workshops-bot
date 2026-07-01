@@ -165,7 +165,7 @@ async def handle_workshop(message: types.Message):
         )
 
         await message.answer(
-            f"⚙️ {w['title']}\nاختر:",
+            f"⚙️ {w['title']}\n {w['description']}\n اختر:",
             reply_markup=keyboard
         )
 
@@ -202,7 +202,8 @@ async def handle_workshop(message: types.Message):
     elif text == "🎥 المصادر":
         resources = w.get("resources", [])
         if resources:
-            await message.answer("\n".join(resources))
+            for i in range(len(resources)):
+                await message.answer("\n".join([resources[i]]))
         else:
             await message.answer("لا توجد مصادر")
 
