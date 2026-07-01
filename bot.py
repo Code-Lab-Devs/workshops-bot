@@ -3,6 +3,7 @@ import json
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from bs4 import BeautifulSoup
 from fastapi import FastAPI, Request
 import asyncio
 import aiohttp
@@ -17,26 +18,22 @@ dp = Dispatcher()
 last_ping = datetime.now()
 
 import re
-async def get_title(url) -> str :
-    import aiohttp
-    from bs4 import BeautifulSoup
-    
-    async def get_title(url: str) -> str:
-        try:
-            timeout = aiohttp.ClientTimeout(total=3)
+async def get_title(url: str) -> str:
+    try:
+        timeout = aiohttp.ClientTimeout(total=3)
 
-            async with aiohttp.ClientSession(timeout=timeout) as session:
-                async with session.get(url, allow_redirects=True) as response:
-                    if "text/html" not in response.headers.get("Content-Type", "").lower():
-                        return ""
+        async with aiohttp.ClientSession(timeout=timeout) as session:
+            async with session.get(url, allow_redirects=True) as response:
+                if "text/html" not in response.headers.get("Content-Type", "").lower():
+                    return ""
 
-                    html = await response.text()
+                html = await response.text()
 
-            soup = BeautifulSoup(html, "html.parser")
-            return soup.title.string.strip() if soup.title else ""
+        soup = BeautifulSoup(html, "html.parser")
+        return soup.title.string.strip() if soup.title else ""
 
-        except Exception:
-            return ""
+    except Exception:
+        return ""
 
     
 
