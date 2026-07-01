@@ -17,7 +17,7 @@ dp = Dispatcher()
 last_ping = datetime.now()
 
 import re
-def get_title(url) -> str :
+async def get_title(url) -> str :
     import aiohttp
     from bs4 import BeautifulSoup
     
