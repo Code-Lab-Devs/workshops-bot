@@ -1,12 +1,9 @@
 import os
 import json
-from urllib import response
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-from aiogram.exceptions import TelegramBadRequest
-from aiohttp.web_fileresponse import content_type
-from fastapi import FastAPI, Request, requests
+from fastapi import FastAPI, Request
 import asyncio
 import aiohttp
 
