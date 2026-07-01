@@ -18,23 +18,25 @@ last_ping = datetime.now()
 
 import re
 def get_title(url) -> str :
-    import requests
+    import aiohttp
     from bs4 import BeautifulSoup
     
-    response = requests.get(url, stream=True)
-    content_type = response.headers.get("Content-Type", "").lower()
-    if "text/html" in content_type:
+    async def get_title(url: str) -> str:
+        try:
+            timeout = aiohttp.ClientTimeout(total=3)
 
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(url, allow_redirects=True) as response:
+                    if "text/html" not in response.headers.get("Content-Type", "").lower():
+                        return ""
 
-        response = requests.get(url,timeout=3)
-        soup = BeautifulSoup(response.text, "html.parser")
-        # print("TITLE:", soup.title.string)
-        response.close()
-        return soup.title.string
-    else:
-        # print("TITLE: No title found")
-        response.close()
-        return ""
+                    html = await response.text()
+
+            soup = BeautifulSoup(html, "html.parser")
+            return soup.title.string.strip() if soup.title else ""
+
+        except Exception:
+            return ""
 
     
 
@@ -225,7 +227,7 @@ async def handle_workshop(message: types.Message):
         resources = w.get("resources", [])
         if resources:
             for i in range(len(resources)):
-                await message.answer(f"\n {get_title(resources[i])} \n{resources[i]}")
+                await message.answer(f"\n {await get_title(resources[i])} \n{resources[i]}")
         else:
             await message.answer("لا توجد مصادر")
 
