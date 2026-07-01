@@ -15,21 +15,21 @@ def get_title(url) -> str :
     from bs4 import BeautifulSoup
     
     response = requests.get(url, stream=True)
-
     content_type = response.headers.get("Content-Type", "").lower()
-
     if "text/html" in content_type:
 
 
-        response = requests.get(url)
+        response = requests.get(url,timeout=3)
         soup = BeautifulSoup(response.text, "html.parser")
         print("TITLE:", soup.title.string)
+        response.close()
         return soup.title.string
     else:
         print("TITLE: No title found")
+        response.close()
         return ""
 
-    response.close()
+    
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
