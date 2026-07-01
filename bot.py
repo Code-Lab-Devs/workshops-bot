@@ -1,17 +1,36 @@
 import os
 import json
+from urllib import response
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.exceptions import TelegramBadRequest
-from fastapi import FastAPI, Request
+from aiohttp.web_fileresponse import content_type
+from fastapi import FastAPI, Request, requests
 import asyncio
 import aiohttp
 
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 TOKEN = os.getenv("BOT_TOKEN")
+def get_title(url) -> str :
+    import requests
+    from bs4 import BeautifulSoup
+    
+    response = requests.get(url, stream=True)
 
+    content_type = response.headers.get("Content-Type", "").lower()
+
+    if "text/html" in content_type:
+
+
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        return soup.title.string
+
+
+    response.close()
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
@@ -205,7 +224,7 @@ async def handle_workshop(message: types.Message):
         resources = w.get("resources", [])
         if resources:
             for i in range(len(resources)):
-                await message.answer("\n".join([resources[i]]))
+                await message.answer(f"\n {get_title(resources[i])} \n".join([resources[i]]))
         else:
             await message.answer("لا توجد مصادر")
 
