@@ -225,7 +225,7 @@ async def handle_workshop(message: types.Message):
         resources = w.get("resources", [])
         if resources:
             for i in range(len(resources)):
-                await message.answer(f"\n {get_title(resources[i])} \n{[resources[i]]}")
+                await message.answer(f"\n {get_title(resources[i])} \n{resources[i]}")
         else:
             await message.answer("لا توجد مصادر")
 
