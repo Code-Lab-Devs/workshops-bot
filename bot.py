@@ -10,6 +10,13 @@ import aiohttp
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 TOKEN = os.getenv("BOT_TOKEN")
+
+bot = Bot(token=TOKEN)
+dp = Dispatcher()
+
+last_ping = datetime.now()
+
+import re
 def get_title(url) -> str :
     import requests
     from bs4 import BeautifulSoup
@@ -21,21 +28,16 @@ def get_title(url) -> str :
 
         response = requests.get(url,timeout=3)
         soup = BeautifulSoup(response.text, "html.parser")
-        print("TITLE:", soup.title.string)
+        # print("TITLE:", soup.title.string)
         response.close()
         return soup.title.string
     else:
-        print("TITLE: No title found")
+        # print("TITLE: No title found")
         response.close()
         return ""
 
     
-bot = Bot(token=TOKEN)
-dp = Dispatcher()
 
-last_ping = datetime.now()
-
-import re
 
 def format_text(text: str) -> str:
     lines = text.split("\n")
@@ -223,7 +225,7 @@ async def handle_workshop(message: types.Message):
         resources = w.get("resources", [])
         if resources:
             for i in range(len(resources)):
-                await message.answer(f"\n {get_title(resources[i])} \n".join([resources[i]]))
+                await message.answer(f"\n {get_title(resources[i])} \n{[resources[i]]}")
         else:
             await message.answer("لا توجد مصادر")
 
